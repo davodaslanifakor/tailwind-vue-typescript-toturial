@@ -1,0 +1,1 @@
+export type Periods = 'today' | 'this week' | 'this month'
