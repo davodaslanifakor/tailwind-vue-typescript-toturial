@@ -13,18 +13,27 @@
 
 <script lang="ts">
 import {defineComponent, ref, computed} from "vue";
-import {Periods} from "@/type";
-import {todayPost, monthPost, weekPost} from "@/mocks/mocks";
+import {Periods, Post} from "@/type";
+
 import moment from "moment";
 import TimelinePost from "@/components/TimelinePost.vue";
+import {useStore} from "@/store";
 
 export default defineComponent({
   name: 'Timeline',
   components: {TimelinePost},
-  setup() {
+ async setup() {
     const periods: Periods[] = ['today', 'this week', 'this month']
     const selectedPeriod = ref<Periods>('today')
-    const posts = computed(()=> [todayPost, weekPost, monthPost].filter(post => {
+   const store = useStore()
+   if(!store.getState().posts.loaded){
+     await store.fetchPosts()
+   }
+   const allPosts = store.getState().posts.ids.reduce<Post[]>((acc,id)=>{
+     const post = store.getState().posts.all[id]
+     return acc.concat(post)
+   },[])
+    const posts = computed(()=> allPosts.filter(post => {
       if (selectedPeriod.value === 'today' &&
           post.created.isAfter(moment().subtract(1, 'day'))
       ) {

@@ -1,10 +1,14 @@
 import {mount} from '@vue/test-utils'
 import Timeline from "@/components/Timeline.vue";
-import {nextTick} from "vue";
 
 describe('Timeline', () => {
+  it.only('render a loader', ()=>{
+    const wrapper = mount(Timeline)
+    expect(wrapper.findAll('[data-test="loading-post"]')).toHaveLength(1)
+  })
   it('renders 3 times periods', () => {
     const wrapper = mount(Timeline)
+    console.log(wrapper.html())
     expect(wrapper.findAll('[data-test="period-item"]')).toHaveLength(3)
   })
   it('update period when clicked', async ()=>{
