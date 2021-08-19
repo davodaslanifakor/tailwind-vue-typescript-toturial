@@ -4,7 +4,7 @@ import App from './App.vue'
 import './assets/main.css'
 import {todayPost, monthPost, weekPost} from "@/mocks/mocks";
 import axios from 'axios'
-
+import 'highlight.js/styles/arta.css'
 const delay = (ms: number) => (new Promise(res => setTimeout(res, ms)))
 
 // @ts-ignore
