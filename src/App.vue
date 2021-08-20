@@ -19,30 +19,23 @@
     </div>
   </div>
   <div>
-    <FormInput :error="usernameStatus.message" name="Username" type="text" v-model="username"/>
     <AppNavbar/>
     <router-view/>
   </div>
 </template>
 <script lang="ts">
-import {require, length, validate, Status} from './validators'
-import {computed, defineComponent, ref} from "vue";
+import {computed, defineComponent} from "vue";
 import AppNavbar from "@/components/Navbar.vue";
 import {useModal} from "@/components/useModal";
-import FormInput from "@/components/FormInput.vue";
+import {provideStore} from "@/store";
 
 export default defineComponent({
-  components: {FormInput, AppNavbar},
+  components: {AppNavbar},
   setup() {
+    provideStore()
     const modal = useModal()
     const showModal = computed(() => modal.visible.value)
-    const username = ref('username')
-    const usernameStatus = computed<Status>(() => {
-      return validate(username.value, [require(), length({min: 4, max: 10})])
-    })
     return {
-      usernameStatus,
-      username,
       modal,
       showModal
     }

@@ -15,16 +15,18 @@
     </li>
   </ul>
   <teleport to="#modal" v-if="modal.visible">
-      modal content
+    <SingUp />
   </teleport>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useModal} from "@/components/useModal";
+import SingUp from "@/components/SingUp.vue";
 
 export default defineComponent({
   name: "AppNavbar",
+  components: {SingUp},
   setup() {
     return {
       modal:useModal(),

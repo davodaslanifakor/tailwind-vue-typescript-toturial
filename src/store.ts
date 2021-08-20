@@ -1,5 +1,5 @@
-import {reactive, readonly} from 'vue'
-import {Post} from "@/type";
+import {reactive, readonly, provide, inject} from 'vue'
+import {Post, User} from "@/type";
 import axios from 'axios'
 
 interface PostState {
@@ -40,6 +40,10 @@ class Store {
         this.state.posts.ids.push(response.data.id.toString())
     }
 
+    async createUser(user: User) {
+        // const response = await axios.post<Post>('/posts', post)
+    }
+
     async fetchPosts() {
         const response = await axios.get<Post[]>('/posts')
         for (const post of response.data) {
@@ -56,5 +60,13 @@ const store = new Store(
     initialState()
 )
 store.getState()
-
-export const useStore = () => store
+export const provideStore = () => {
+    provide('store',store)
+}
+export const createStore= () =>{
+    return new Store(initialState())
+}
+export const useStore = (): Store => {
+    const store = inject<Store>('store')
+    return  <Store>store
+}
