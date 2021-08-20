@@ -34,19 +34,21 @@ class Store {
         return readonly(this.state)
     }
 
+    async createPost(post: Post) {
+        const response = await axios.post<Post>('/posts', post)
+        this.state.posts.all[response.data.id] = response.data
+        this.state.posts.ids.push(response.data.id.toString())
+    }
+
     async fetchPosts() {
         const response = await axios.get<Post[]>('/posts')
-        const ids: string[] = []
-        const all: Record<string, Post> = {}
         for (const post of response.data) {
-            ids.push(post.id.toString())
-            all[post.id] = post
+            if (!this.state.posts.ids.includes(post.id.toString())) {
+                this.state.posts.ids.push(post.id.toString())
+            }
+            this.state.posts.all[post.id] = post
         }
-        this.state.posts ={
-            ids,
-            all,
-            loaded: false
-        }
+        this.state.posts.loaded = true
     }
 }
 
@@ -55,4 +57,4 @@ const store = new Store(
 )
 store.getState()
 
-export const useStore = () =>  store
+export const useStore = () => store

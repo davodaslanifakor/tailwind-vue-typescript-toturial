@@ -5,11 +5,30 @@
         new post
       </router-link>
     </li>
+    <li>
+      <button @click="modal.showModal"
+              data-test="sing-up"
+              class="bg-green-500 rounded text-white text-xs p-3 font-bold capitalize ml-6"
+      >
+        Sing Up
+      </button>
+    </li>
   </ul>
+  <teleport to="#modal" v-if="modal.visible">
+      modal content
+  </teleport>
 </template>
 
-<script>
-export default {
-  name: "AppNavbar"
-}
+<script lang="ts">
+import {defineComponent} from "vue";
+import {useModal} from "@/components/useModal";
+
+export default defineComponent({
+  name: "AppNavbar",
+  setup() {
+    return {
+      modal:useModal(),
+    }
+  }
+})
 </script>
