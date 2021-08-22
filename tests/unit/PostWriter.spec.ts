@@ -21,7 +21,6 @@ describe('PostWriter',()=>{
             expect(wrapper.emitted().save[0][0].markdown).toBe('### content')
             // @ts-ignore
             expect(wrapper.emitted().save[0][0].html).toBe('<h3 id="content">content</h3>\n')
-            console.log(wrapper.emitted().save)
             done()
         },550)
     })

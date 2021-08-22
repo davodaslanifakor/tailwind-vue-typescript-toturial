@@ -4,6 +4,7 @@ import Timeline from "@/components/Timeline.vue";
 import flushPromises from 'flush-promises'
 import Home from "@/Home.vue";
 import {todayPost, monthPost, weekPost} from "@/mocks/mocks";
+import {createStore} from "@/store";
 
 const mountSuspense = async (component, options) => {
     const wrapper = mount(defineComponent({
@@ -18,26 +19,33 @@ const mountSuspense = async (component, options) => {
     await flushPromises()
     return wrapper
 }
-
+const options = {
+    global: {
+        provide: {
+            store: createStore()
+        }
+    }
+}
 jest.mock('axios', () => ({
     get: (url: string) => ({
         data: [todayPost, monthPost, weekPost]
     })
 }))
+
 describe('Timeline', () => {
     it('render a loader', async () => {
         // @ts-ignore
-      const wrapper = mount(Home)
-      expect(wrapper.find('[data-test="loading-post"]').exists()).toBe(true)
+        const wrapper = mount(Home, options)
+        expect(wrapper.find('[data-test="loading-post"]').exists()).toBe(true)
     })
     it('renders 3 times periods', async () => {
         // @ts-ignore
-        const wrapper = await mountSuspense(Timeline)
+        const wrapper = await mountSuspense(Timeline, options)
         expect(wrapper.findAll('[data-test="period-item"]')).toHaveLength(3)
     })
     it('update period when clicked', async () => {
         // @ts-ignore
-        const wrapper = await mountSuspense(Timeline)
+        const wrapper = await mountSuspense(Timeline,options)
         const $today = wrapper.findAll('[data-test="period-item"]')[0]
         expect($today.classes()).toContain('is-active')
         const $week = wrapper.findAll('[data-test="period-item"]')[1]
@@ -47,7 +55,7 @@ describe('Timeline', () => {
     })
     it('render post today by default', async () => {
         // @ts-ignore
-        const wrapper = await mountSuspense(Timeline)
+        const wrapper = await mountSuspense(Timeline, options)
         expect(wrapper.findAll('[data-test="post"]')).toHaveLength(1)
 
         const $month = wrapper.findAll('[data-test="period-item"]')[2]
@@ -57,7 +65,5 @@ describe('Timeline', () => {
         const $week = wrapper.findAll('[data-test="period-item"]')[1]
         await $week.trigger('click')
         expect(wrapper.findAll('[data-test="post"]')).toHaveLength(2)
-
-
     })
 })
