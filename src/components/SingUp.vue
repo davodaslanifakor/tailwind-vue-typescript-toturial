@@ -33,7 +33,7 @@ export default defineComponent({
     });
 
     // eslint-disable-next-line no-unused-vars
-    const submit = (e: any) => {
+    const submit = async (e: any) => {
       if (!usernameStatus.value.valid || !passwordStatus.value.valid) {
         return
       }
@@ -42,7 +42,7 @@ export default defineComponent({
         username: username.value,
         password: password.value
       }
-      store.createUser(user)
+      await store.createUser(user)
       modal.hideModal()
     }
     return {
