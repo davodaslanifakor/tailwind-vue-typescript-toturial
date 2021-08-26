@@ -1,10 +1,10 @@
 <template>
-  <div data-test="post"
+  <router-link :to="{name:'ShowPost',params: {id:post.id}}" data-test="post"
        class="shadow-md rounded p-6 mb-4"
       >
     <p class="font-weight-bold text-gray-500" data-test="title-post">{{ post.title }}</p>
     <p class="font-weight-normal text-gray-400">    {{ post.created.format('Do MM') }}</p>
-  </div>
+  </router-link>
 </template>
 
 <script lang="ts">

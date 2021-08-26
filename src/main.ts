@@ -28,6 +28,16 @@ axios.post = async (url: string, payload: Post) => {
             data: {id, ...payload}
         })
     }
+    if (url === '/users') {
+        await delay(1000)
+        const id = random(100, 10000)
+        // @ts-ignore
+        const {id: oldId,password, ...rest} = payload
+        return Promise.resolve({
+            // @ts-ignore
+            data: {id, ...rest}
+        })
+    }
 }
 
 const app = createApp(App)
