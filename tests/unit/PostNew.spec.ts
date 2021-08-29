@@ -1,13 +1,23 @@
 import {mount} from "@vue/test-utils";
 import NewPost from "@/NewPost.vue";
-import {createStore} from "@/store";
+import {createStore, initialState} from "@/store";
 import {Post} from "@/type";
-const store = createStore()
+import {makeRouter} from "@/router";
+const store = createStore({
+    ...initialState(),
+    authors: {
+        ...initialState().authors,
+        currentUserId: '2'
+    }
+
+})
+const router = makeRouter()
 const options = {
     global: {
         provide: {
             store
-        }
+        },
+        plugin:[router]
     }
 }
 
